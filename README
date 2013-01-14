@@ -1,0 +1,3 @@
+Editable Grid with using wicket 6
+Do mvn jetty:run to see the grid in action
+
