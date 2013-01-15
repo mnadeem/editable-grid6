@@ -3,7 +3,6 @@ package com.nadeem.app;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 
-import com.nadeem.app.grid.Start;
 import com.nadeem.app.page.HomePage;
 
 /**
