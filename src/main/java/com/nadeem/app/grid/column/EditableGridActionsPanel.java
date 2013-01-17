@@ -50,6 +50,7 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
+				rowItem.setMetaData(EDITING, Boolean.FALSE);
 				target.add(rowItem);
 				onCancel(target);
 			}
@@ -79,6 +80,7 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 			}
 			@Override
 			protected void onSuccess(AjaxRequestTarget target) {
+				rowItem.setMetaData(EDITING, Boolean.FALSE);
 				target.add(rowItem);
 				onSave(target);
 				
@@ -95,6 +97,6 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 	}
 
 	private boolean isThisRowBeingEdited(ListItem<T> rowItem) {
-		return rowItem.getMetaData(EDITING) != null;
+		return rowItem.getMetaData(EDITING);
 	}
 }

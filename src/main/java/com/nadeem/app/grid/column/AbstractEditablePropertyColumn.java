@@ -6,7 +6,7 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
-public abstract class AbstractEditablePropertyColumn<T, S> extends PropertyColumn<T, S> implements IEditableGridColumn {
+public abstract class AbstractEditablePropertyColumn<T, S> extends PropertyColumn<T, S> implements IEditableGridColumn<T> {
 
 	private static final long serialVersionUID 	= 1L;
 	private boolean isEditable 					= true;
@@ -36,7 +36,9 @@ public abstract class AbstractEditablePropertyColumn<T, S> extends PropertyColum
 		}		
 	}
 
-	private boolean inEditiingMode(Item<ICellPopulator<T>> rowItem){return true;}
+	private boolean inEditiingMode(Item<ICellPopulator<T>> rowItem){
+		return rowItem.getMetaData(EditableGridActionsPanel.EDITING);
+	}
 	 
 	protected void addBehavior(FormComponent<T> editorComponent, IModel<T> rowModel) {
 

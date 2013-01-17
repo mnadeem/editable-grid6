@@ -1,5 +1,6 @@
 package com.nadeem.app.grid;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.Component;
@@ -13,28 +14,32 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import com.nadeem.app.grid.column.EditableGridActionsColumn;
+import com.nadeem.app.grid.column.EditableGridActionsPanel;
 import com.nadeem.app.grid.provider.IEditableDataProvider;
 
 public class EditableGrid<T, S> extends Panel {
 
 	private static final long serialVersionUID = 1L;
 
-	public EditableGrid(final String id, final List<IColumn<T, S>> columns,
+	public EditableGrid(final String id, final List<? extends IColumn<T, S>> columns,
 				final IEditableDataProvider<T> dataProvider, final long rowsPerPage) {
 		super(id);
+		List<IColumn<T, S>>  newCols = new ArrayList<IColumn<T,S>>();
+		newCols.addAll(columns);
+		newCols.add(newActionsColumn());
 
-		add(buildForm(columns, dataProvider, rowsPerPage));
+		add(buildForm(newCols, dataProvider, rowsPerPage));
 	}
 
-	private Component buildForm(List<IColumn<T, S>> columns, IEditableDataProvider<T> dataProvider, long rowsPerPage) {
+	private Component buildForm(final List<? extends IColumn<T, S>> columns, IEditableDataProvider<T> dataProvider, long rowsPerPage) {
 		Form<T> form = new Form<T>("form");
 		form.setOutputMarkupId(true);
 		form.add(newDataTable(columns, dataProvider, rowsPerPage));
 		return form;
 	}
 
-	private Component newDataTable(final List<IColumn<T, S>> columns, IEditableDataProvider<T> dataProvider, long rowsPerPage) {
-			columns.add(newActionsColumn());
+	private Component newDataTable(final List<? extends IColumn<T, S>> columns, IEditableDataProvider<T> dataProvider, long rowsPerPage) {
+			
 			DataTable<T, S> dataTable = new DataTable<T, S>("dataTable", columns, dataProvider, rowsPerPage) {
 
 			private static final long serialVersionUID = 1L;
@@ -89,6 +94,7 @@ public class EditableGrid<T, S> extends Panel {
 		public RowItem(final String id, int index, final IModel<T> model) {
 			super(id, index, model);
 			this.setOutputMarkupId(true);
+			this.setMetaData(EditableGridActionsPanel.EDITING, Boolean.FALSE);
 		}		
 	}
 }
