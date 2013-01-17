@@ -21,9 +21,10 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 
 	public EditableGridActionsPanel(String id, final Item<ICellPopulator<T>> cellItem) {
 		super(id);
-		
-		final ListItem<T> rowItem = ((ListItem<T>) cellItem.findParent(ListItem.class));
-		
+
+		@SuppressWarnings("unchecked")
+		final ListItem<T> rowItem = ((ListItem<T>) cellItem.findParent(Item.class));
+
 		AjaxLink<String> editLink = new AjaxLink<String>("edit") {
 
 			private static final long serialVersionUID = 1L;

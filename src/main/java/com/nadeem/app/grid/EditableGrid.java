@@ -9,31 +9,31 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import com.nadeem.app.grid.column.EditableGridActionsColumn;
+import com.nadeem.app.grid.provider.IEditableDataProvider;
 
 public class EditableGrid<T, S> extends Panel {
 
 	private static final long serialVersionUID = 1L;
 
 	public EditableGrid(final String id, final List<IColumn<T, S>> columns,
-				final IDataProvider<T> dataProvider, final long rowsPerPage) {
+				final IEditableDataProvider<T> dataProvider, final long rowsPerPage) {
 		super(id);
 		
 		add(buildForm(columns, dataProvider, rowsPerPage));
 	}
 
-	private Component buildForm(List<IColumn<T, S>> columns, IDataProvider<T> dataProvider, long rowsPerPage) {
+	private Component buildForm(List<IColumn<T, S>> columns, IEditableDataProvider<T> dataProvider, long rowsPerPage) {
 		Form<T> form = new Form<T>("form");
 		form.setOutputMarkupId(true);
 		form.add(newDataTable(columns, dataProvider, rowsPerPage));
 		return form;
 	}
 
-	private Component newDataTable(final List<IColumn<T, S>> columns, IDataProvider<T> dataProvider, long rowsPerPage) {
+	private Component newDataTable(final List<IColumn<T, S>> columns, IEditableDataProvider<T> dataProvider, long rowsPerPage) {
 			columns.add(newActionsColumn());
 			DataTable<T, S> dataTable = new DataTable<T, S>("dataTable", columns, dataProvider, rowsPerPage) {
 
@@ -82,6 +82,7 @@ public class EditableGrid<T, S> extends Panel {
 		
 	}
 
+	@SuppressWarnings("hiding")
 	private class RowItem<T> extends Item<T> {
 
 		private static final long serialVersionUID = 1L;
