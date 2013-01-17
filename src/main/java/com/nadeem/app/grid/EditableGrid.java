@@ -22,7 +22,7 @@ public class EditableGrid<T, S> extends Panel {
 	public EditableGrid(final String id, final List<IColumn<T, S>> columns,
 				final IEditableDataProvider<T> dataProvider, final long rowsPerPage) {
 		super(id);
-		
+
 		add(buildForm(columns, dataProvider, rowsPerPage));
 	}
 
@@ -44,7 +44,7 @@ public class EditableGrid<T, S> extends Panel {
 				return new RowItem<T>(id, index, model);
 			}
 		};
-		
+
 		return dataTable;
 	}
 
@@ -82,7 +82,6 @@ public class EditableGrid<T, S> extends Panel {
 		
 	}
 
-	@SuppressWarnings("hiding")
 	public static class RowItem<T> extends Item<T> {
 
 		private static final long serialVersionUID = 1L;
