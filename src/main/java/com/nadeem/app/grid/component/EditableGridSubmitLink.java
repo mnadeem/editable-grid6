@@ -78,7 +78,9 @@ public abstract class EditableGridSubmitLink extends AjaxSubmitLink {
 	}
 
 	private boolean formComponentActive(FormComponent<?> formComponent) {
-		return formComponent.isVisibleInHierarchy() && formComponent.isValid() && formComponent.isEnabled()
+		return formComponent.isVisibleInHierarchy()
+				&& formComponent.isValid()
+				&& formComponent.isEnabled()
 				&& formComponent.isEnableAllowed();
 	}
 }

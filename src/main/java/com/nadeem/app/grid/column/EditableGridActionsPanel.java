@@ -1,7 +1,5 @@
 package com.nadeem.app.grid.column;
 
-import com.nadeem.app.grid.column.EditableCellPanel;
-
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -39,6 +37,7 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 			@Override
 			public void onClick(AjaxRequestTarget target) {							
 				rowItem.setMetaData(EDITING, Boolean.TRUE);
+				target.add(rowItem);
 			}
 			@Override
 			public boolean isVisible() {
@@ -51,7 +50,7 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-
+				target.add(rowItem);
 				onCancel(target);
 			}
 			@Override
@@ -80,7 +79,7 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 			}
 			@Override
 			protected void onSuccess(AjaxRequestTarget target) {
-
+				target.add(rowItem);
 				onSave(target);
 				
 			}
