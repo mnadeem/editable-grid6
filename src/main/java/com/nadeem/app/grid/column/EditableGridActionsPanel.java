@@ -1,5 +1,8 @@
 package com.nadeem.app.grid.column;
 
+import com.nadeem.app.grid.column.EditableCellPanel;
+
+import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -11,6 +14,10 @@ import org.apache.wicket.markup.repeater.Item;
 import com.nadeem.app.grid.component.EditableGridSubmitLink;
 
 public abstract class EditableGridActionsPanel<T> extends Panel {
+
+	public final static MetaDataKey<Boolean> EDITING 	= new MetaDataKey<Boolean>() {
+		private static final long serialVersionUID = 1L;
+	};
 
 	private static final long serialVersionUID = 1L;
 	
@@ -31,7 +38,7 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {							
-
+				rowItem.setMetaData(EDITING, Boolean.TRUE);
 			}
 			@Override
 			public boolean isVisible() {
@@ -89,6 +96,6 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 	}
 
 	private boolean isThisRowBeingEdited(ListItem<T> rowItem) {
-		return true;
+		return rowItem.getMetaData(EDITING) != null;
 	}
 }

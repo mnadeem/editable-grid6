@@ -83,13 +83,13 @@ public class EditableGrid<T, S> extends Panel {
 	}
 
 	@SuppressWarnings("hiding")
-	private class RowItem<T> extends Item<T> {
+	public static class RowItem<T> extends Item<T> {
 
 		private static final long serialVersionUID = 1L;
 		
 		public RowItem(final String id, int index, final IModel<T> model) {
 			super(id, index, model);
 			this.setOutputMarkupId(true);
-		}				
+		}		
 	}
 }
