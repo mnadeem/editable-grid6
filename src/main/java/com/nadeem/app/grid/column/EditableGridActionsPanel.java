@@ -37,7 +37,7 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 			@Override
 			public void onClick(AjaxRequestTarget target) {							
 				rowItem.setMetaData(EDITING, Boolean.TRUE);
-				send(getPage(), Broadcast.BUBBLE, rowItem);
+				send(getPage(), Broadcast.BREADTH, rowItem);
 				target.add(rowItem);
 			}
 			@Override
@@ -52,7 +52,7 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				rowItem.setMetaData(EDITING, Boolean.FALSE);
-				send(getPage(), Broadcast.EXACT, rowItem);
+				send(getPage(), Broadcast.BREADTH, rowItem);
 				target.add(rowItem);
 				onCancel(target);
 			}
@@ -83,6 +83,7 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 			@Override
 			protected void onSuccess(AjaxRequestTarget target) {
 				rowItem.setMetaData(EDITING, Boolean.FALSE);
+				send(getPage(), Broadcast.BREADTH, rowItem);
 				target.add(rowItem);
 				onSave(target);
 				
