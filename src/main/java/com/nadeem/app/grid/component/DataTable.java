@@ -1,19 +1,13 @@
 package com.nadeem.app.grid.component;
-
-
-
-
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.event.IEvent;
-import org.apache.wicket.event.IEventSink;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.DataGridView;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractToolbar;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.DefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IStyledColumn;
 import org.apache.wicket.markup.ComponentTag;
@@ -34,44 +28,17 @@ import org.apache.wicket.util.visit.IVisitor;
 
 import com.nadeem.app.grid.column.EditableGridActionsPanel;
 
-
 /**
- * A data table builds on data grid view to introduce toolbars. Toolbars can be used to display
- * sortable column headers, paging information, filter controls, and other information.
- * <p>
- * Data table also provides its own markup for an html table so the user does not need to provide it
- * himself. This makes it very simple to add a datatable to the markup, however, some flexibility.
- * <p>
- * Example
  * 
- * <pre>
- * &lt;table wicket:id=&quot;datatable&quot;&gt;&lt;/table&gt;
- * </pre>
+ * Copied from org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable
  * 
- * And the related Java code: ( the first column will be sortable because its sort property is
- * specified, the second column will not )
  * 
- * <pre>
- * List&lt;IColumn&lt;T&gt;&gt; columns = new ArrayList&lt;IColumn&lt;T&gt;&gt;();
- * 
- * columns.add(new PropertyColumn(new Model&lt;String&gt;(&quot;First Name&quot;), &quot;name.first&quot;, &quot;name.first&quot;));
- * columns.add(new PropertyColumn(new Model&lt;String&gt;(&quot;Last Name&quot;), &quot;name.last&quot;));
- * 
- * DataTable table = new DataTable(&quot;datatable&quot;, columns, new UserProvider(), 10);
- * table.addBottomToolbar(new NavigationToolbar(table));
- * table.addTopToolbar(new HeadersToolbar(table, null));
- * add(table);
- * </pre>
- * 
- * @see DefaultDataTable
- * 
- * @author Igor Vaynberg (ivaynberg)
- * 
+ * @author Nadeem
+ *
  * @param <T>
  *            The model object type
  * @param <S>
  *            the type of the sorting parameter
- * 
  */
 public class DataTable<T, S> extends Panel implements IPageableItems
 {
@@ -122,18 +89,16 @@ public class DataTable<T, S> extends Panel implements IPageableItems
 	 *            number of rows per page
 	 */
 	public DataTable(final String id, final List<? extends IColumn<T, S>> columns,
-		final IDataProvider<T> dataProvider, final long rowsPerPage)
-	{
+		final IDataProvider<T> dataProvider, final long rowsPerPage) {
 		super(id);
 
 		Args.notEmpty(columns, "columns");
-
 
 		this.columns = columns;
 		this.caption = new Caption("caption", getCaptionModel());
 		add(caption);
 		body = newBodyContainer("body");
-		datagrid = new EditableDataGridView("rows", columns, dataProvider);
+		datagrid = new EditableDataGridView<T>("rows", columns, dataProvider);
 
 		datagrid.setItemsPerPage(rowsPerPage);
 		body.add(datagrid);
@@ -483,21 +448,21 @@ public class DataTable<T, S> extends Panel implements IPageableItems
 		}
 	}
 	
-	private class EditableDataGridView<T> extends DataGridView<T> {
+	private class EditableDataGridView<R> extends DataGridView<R> {
+
 		public EditableDataGridView(String id,
-				List<? extends ICellPopulator<T>> populators,
-				IDataProvider<T> dataProvider) {
+				List<? extends ICellPopulator<R>> populators,
+				IDataProvider<R> dataProvider) {
 			super(id, populators, dataProvider);
-			// TODO Auto-generated constructor stub
 		}
 		private static final long serialVersionUID = 1L;
-
+	
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		@Override
 		protected Item newCellItem(final String id, final int index, final IModel model)
 		{
 			Item item = DataTable.this.newCellItem(id, index, model);
-			final IColumn<T, S> column = (IColumn<T, S>) DataTable.this.columns.get(index);
+			final IColumn<R, S> column = (IColumn<R, S>) DataTable.this.columns.get(index);
 			if (column instanceof IStyledColumn)
 			{
 				item.add(new CssAttributeBehavior()
@@ -514,30 +479,31 @@ public class DataTable<T, S> extends Panel implements IPageableItems
 			return item;
 		}
 		@Override
-		protected Item<T> newRowItem(String id, int index, IModel<T> model) {
-			return new RowItem<T>(id, index, model);
+		protected Item<R> newRowItem(String id, int index, IModel<R> model) {
+			return new RowItem<R>(id, index, model);
 		}
 
-		public void refreashItem(Item<T> rowItem) {
+		public void refreashItem(Item<R> rowItem) {
 			rowItem.removeAll();
 			populateItem(rowItem);
 		}
 
-		public class RowItem<T> extends Item<T> {
+		public class RowItem<RI> extends Item<RI> {
 
 			private static final long serialVersionUID = 1L;
 			
-			public RowItem(final String id, int index, final IModel<T> model) {
+			public RowItem(final String id, int index, final IModel<RI> model) {
 				super(id, index, model);
 				this.setOutputMarkupId(true);
 				this.setMetaData(EditableGridActionsPanel.EDITING, Boolean.FALSE);
 			}		
 		}
 	}
-	
+
 	public void onEvent(IEvent<?> event) {
 		if (event.getPayload() instanceof Item) {
-			Item<T> rowItem = (Item<T>) event.getPayload();
+			@SuppressWarnings("unchecked")
+			Item<T> rowItem = ((Item<T>) event.getPayload());
 			datagrid.refreashItem(rowItem);
 			event.stop();
 		}

@@ -20,9 +20,10 @@ public abstract class AbstractEditablePropertyColumn<T, S> extends PropertyColum
 		this.isEditable = isEditable;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public final void populateItem(final Item<ICellPopulator<T>> item, final String componentId, final IModel<T> rowModel) {
-		@SuppressWarnings("unchecked")
+
 		final Item<T> rowItem = ((Item<T>) item.findParent(Item.class));
 		
 		if (inEditiingMode(rowItem) && isEditable) {
