@@ -19,7 +19,6 @@ import org.apache.wicket.markup.repeater.IItemReuseStrategy;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.markup.repeater.RepeatingView;
-import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.lang.Args;
 import org.apache.wicket.util.string.Strings;
@@ -27,6 +26,7 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
 import com.nadeem.app.grid.column.EditableGridActionsPanel;
+import com.nadeem.app.grid.provider.IEditableDataProvider;
 
 /**
  * 
@@ -40,7 +40,7 @@ import com.nadeem.app.grid.column.EditableGridActionsPanel;
  * @param <S>
  *            the type of the sorting parameter
  */
-public class DataTable<T, S> extends Panel implements IPageableItems
+public class EditableDataTable<T, S> extends Panel implements IPageableItems
 {
 	static abstract class CssAttributeBehavior extends Behavior
 	{
@@ -88,8 +88,8 @@ public class DataTable<T, S> extends Panel implements IPageableItems
 	 * @param rowsPerPage
 	 *            number of rows per page
 	 */
-	public DataTable(final String id, final List<? extends IColumn<T, S>> columns,
-		final IDataProvider<T> dataProvider, final long rowsPerPage) {
+	public EditableDataTable(final String id, final List<? extends IColumn<T, S>> columns,
+		final IEditableDataProvider<T> dataProvider, final long rowsPerPage) {
 		super(id);
 
 		Args.notEmpty(columns, "columns");
@@ -203,9 +203,9 @@ public class DataTable<T, S> extends Panel implements IPageableItems
 	/**
 	 * @return dataprovider
 	 */
-	public final IDataProvider<T> getDataProvider()
+	public final IEditableDataProvider<T> getDataProvider()
 	{
-		return datagrid.getDataProvider();
+		return (IEditableDataProvider<T>) datagrid.getDataProvider();
 	}
 
 	/**
@@ -272,7 +272,7 @@ public class DataTable<T, S> extends Panel implements IPageableItems
 	 *            item reuse strategy
 	 * @return this for chaining
 	 */
-	public final DataTable<T, S> setItemReuseStrategy(final IItemReuseStrategy strategy)
+	public final EditableDataTable<T, S> setItemReuseStrategy(final IItemReuseStrategy strategy)
 	{
 		datagrid.setItemReuseStrategy(strategy);
 		return this;
@@ -410,7 +410,7 @@ public class DataTable<T, S> extends Panel implements IPageableItems
 	}
 
 	/**
-	 * A caption for the table. It renders itself only if {@link DataTable#getCaptionModel()} has
+	 * A caption for the table. It renders itself only if {@link EditableDataTable#getCaptionModel()} has
 	 * non-empty value.
 	 */
 	private static class Caption extends Label
@@ -450,19 +450,18 @@ public class DataTable<T, S> extends Panel implements IPageableItems
 	
 	private class EditableDataGridView<R> extends DataGridView<R> {
 
-		public EditableDataGridView(String id,
-				List<? extends ICellPopulator<R>> populators,
-				IDataProvider<R> dataProvider) {
+		private static final long serialVersionUID = 1L;
+
+		public EditableDataGridView(String id, List<? extends ICellPopulator<R>> populators, IEditableDataProvider<R> dataProvider) {
 			super(id, populators, dataProvider);
 		}
-		private static final long serialVersionUID = 1L;
 	
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		@Override
 		protected Item newCellItem(final String id, final int index, final IModel model)
 		{
-			Item item = DataTable.this.newCellItem(id, index, model);
-			final IColumn<R, S> column = (IColumn<R, S>) DataTable.this.columns.get(index);
+			Item item = EditableDataTable.this.newCellItem(id, index, model);
+			final IColumn<R, S> column = (IColumn<R, S>) EditableDataTable.this.columns.get(index);
 			if (column instanceof IStyledColumn)
 			{
 				item.add(new CssAttributeBehavior()
@@ -497,7 +496,7 @@ public class DataTable<T, S> extends Panel implements IPageableItems
 				this.setOutputMarkupId(true);
 				this.setMetaData(EditableGridActionsPanel.EDITING, Boolean.FALSE);
 			}		
-		}
+		}		
 	}
 
 	public void onEvent(IEvent<?> event) {
@@ -507,7 +506,5 @@ public class DataTable<T, S> extends Panel implements IPageableItems
 			datagrid.refreashItem(rowItem);
 			event.stop();
 		}
-		
-		
-	}
+	}	
 }
