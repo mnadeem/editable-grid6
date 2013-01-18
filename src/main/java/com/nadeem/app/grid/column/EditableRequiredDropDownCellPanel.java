@@ -13,6 +13,7 @@ public class EditableRequiredDropDownCellPanel<T, S> extends EditableCellPanel<T
 	public EditableRequiredDropDownCellPanel(final String id, final PropertyColumn<T, S> column, @SuppressWarnings("rawtypes") final List choices) {
 		super(id);
 
+		@SuppressWarnings("unchecked")
 		DropDownChoice<T> field = new DropDownChoice<T>("dropdown", choices);
 		field.setLabel(column.getDisplayModel());
 		add(field);	

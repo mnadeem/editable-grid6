@@ -2,6 +2,8 @@ package com.nadeem.app.grid.column;
 
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxCallListener;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
@@ -61,16 +63,21 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 				return isThisRowBeingEdited(rowItem);
 			}
 		};
-		/*AjaxLink<String> deleteLink = new RemoveItemLink<T>("delete", rowItem) {
+		AjaxLink<String> deleteLink = new AjaxLink<String>("delete") {
 
 			private static final long serialVersionUID = 1L;
 			@Override
-			protected void onRemove(AjaxRequestTarget target) {
-				dataTable.setSelectedItem(null);
-				target.addComponent(dataTable);	
-				onDelete(target);
+			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+				super.updateAjaxAttributes(attributes);
+				AjaxCallListener listener = new AjaxCallListener(); 
+				listener.onPrecondition("if(!confirm('Do you really want to delete?')){return false;}"); 
+				attributes.getAjaxCallListeners().add(listener); 
 			}
-		};*/
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+			
+			}
+		};
 		
 		AjaxSubmitLink saveLink = new EditableGridSubmitLink("save", rowItem) {
 
@@ -97,6 +104,7 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 		add(editLink);
 		add(saveLink);
 		add(cancelLink);
+		add(deleteLink);
 	}
 	
 	private boolean isThisRowBeingEdited(Item<T> rowItem) {
