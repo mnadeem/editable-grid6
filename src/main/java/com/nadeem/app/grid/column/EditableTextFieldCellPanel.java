@@ -18,6 +18,7 @@ public class EditableTextFieldCellPanel<T, S> extends EditableCellPanel<T> {
 		add(field);	
 	}
 
+	@SuppressWarnings("unchecked")
 	public FormComponent<T> getEditableComponent() {
 		return (FormComponent<T>) get("textfield");
 	}

@@ -14,7 +14,6 @@ public class EditableGridActionsColumn<T, S> extends PropertyColumn<T, S> {
 
 	private static final long serialVersionUID = 1L;
 
-	
 	@Override
 	public void populateItem(final Item<ICellPopulator<T>> item, final String componentId, final IModel<T> rowModel) {
 
