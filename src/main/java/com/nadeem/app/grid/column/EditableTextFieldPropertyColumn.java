@@ -9,11 +9,14 @@ public class EditableTextFieldPropertyColumn<T, S> extends AbstractEditablePrope
 	public EditableTextFieldPropertyColumn(IModel<String> displayModel, String propertyExpression) {
 		super(displayModel, propertyExpression);
 	}
+	
+	
+	public EditableTextFieldPropertyColumn(IModel<String> displayModel, String propertyExpression, boolean isEditable) {
+		super(displayModel, propertyExpression, isEditable);
+	}
 
 	@Override
 	public EditableCellPanel<T> getEditableCellPanel(String componentId) {
-		// TODO Auto-generated method stub
 		return new EditableTextFieldCellPanel<T, S>(componentId, this);
 	}
-
 }
