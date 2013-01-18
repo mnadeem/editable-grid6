@@ -4,8 +4,8 @@ import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
-import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 
@@ -28,7 +28,7 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 		super(id);
 
 		@SuppressWarnings("unchecked")
-		final ListItem<T> rowItem = ((ListItem<T>) cellItem.findParent(Item.class));
+		final Item<T> rowItem = ((Item<T>) cellItem.findParent(Item.class));
 
 		AjaxLink<String> editLink = new AjaxLink<String>("edit") {
 
@@ -37,6 +37,7 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 			@Override
 			public void onClick(AjaxRequestTarget target) {							
 				rowItem.setMetaData(EDITING, Boolean.TRUE);
+				send(getPage(), Broadcast.BUBBLE, rowItem);
 				target.add(rowItem);
 			}
 			@Override
@@ -51,6 +52,7 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				rowItem.setMetaData(EDITING, Boolean.FALSE);
+				send(getPage(), Broadcast.EXACT, rowItem);
 				target.add(rowItem);
 				onCancel(target);
 			}
@@ -95,8 +97,9 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 		add(saveLink);
 		add(cancelLink);
 	}
-
-	private boolean isThisRowBeingEdited(ListItem<T> rowItem) {
+	
+	private boolean isThisRowBeingEdited(Item<T> rowItem) {
 		return rowItem.getMetaData(EDITING);
 	}
+
 }

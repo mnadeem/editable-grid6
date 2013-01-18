@@ -23,7 +23,7 @@ public abstract class AbstractEditablePropertyColumn<T, S> extends PropertyColum
 	@Override
 	public final void populateItem(final Item<ICellPopulator<T>> item, final String componentId, final IModel<T> rowModel) {
 		@SuppressWarnings("unchecked")
-		Item<ICellPopulator<T>> rowItem = (Item<ICellPopulator<T>>) item.findParent(Item.class);
+		final Item<T> rowItem = ((Item<T>) item.findParent(Item.class));
 		
 		if (inEditiingMode(rowItem) && isEditable) {
 			EditableCellPanel<T> provider 		= getEditableCellPanel(componentId);
@@ -36,7 +36,7 @@ public abstract class AbstractEditablePropertyColumn<T, S> extends PropertyColum
 		}		
 	}
 
-	private boolean inEditiingMode(Item<ICellPopulator<T>> rowItem){
+	private boolean inEditiingMode(Item<T> rowItem){
 		return rowItem.getMetaData(EditableGridActionsPanel.EDITING);
 	}
 	 

@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
+import com.nadeem.app.grid.component.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -40,16 +40,8 @@ public class EditableGrid<T, S> extends Panel {
 
 	private Component newDataTable(final List<? extends IColumn<T, S>> columns, IEditableDataProvider<T> dataProvider, long rowsPerPage) {
 			
-			DataTable<T, S> dataTable = new DataTable<T, S>("dataTable", columns, dataProvider, rowsPerPage) {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected Item<T> newRowItem(String id, int index, IModel<T> model) {
-				return new RowItem<T>(id, index, model);
-			}
-		};
-
+			DataTable<T, S> dataTable = new DataTable<T, S>("dataTable", columns, dataProvider, rowsPerPage);
+		dataTable.setOutputMarkupId(true);
 		return dataTable;
 	}
 
@@ -87,14 +79,4 @@ public class EditableGrid<T, S> extends Panel {
 		
 	}
 
-	public static class RowItem<T> extends Item<T> {
-
-		private static final long serialVersionUID = 1L;
-		
-		public RowItem(final String id, int index, final IModel<T> model) {
-			super(id, index, model);
-			this.setOutputMarkupId(true);
-			this.setMetaData(EditableGridActionsPanel.EDITING, Boolean.FALSE);
-		}		
-	}
 }
