@@ -19,7 +19,7 @@ public class RequiredEditableTextFieldColumn<T, S> extends EditableTextFieldProp
 	}
 
 	@Override
-	protected void addBehavior(final FormComponent<T> editorComponent, final IModel<T> rowModel)
+	protected void addBehaviors(final FormComponent<T> editorComponent)
 	{
 		editorComponent.setRequired(true);
 	}

@@ -79,9 +79,19 @@ public class EditableGrid<T, S> extends Panel
 			protected void onDelete(AjaxRequestTarget target, IModel<T> rowModel)
 			{
 				EditableGrid.this.onDelete(target, rowModel);
-			}			
+			}
+			@Override
+			protected void onCancel(AjaxRequestTarget target) {
+				EditableGrid.this.onCancel(target);
+			}
 		};
 	}
+	
+	protected void onCancel(AjaxRequestTarget target)
+	{
+	
+	}
+
 
 	protected void onDelete(AjaxRequestTarget target, IModel<T> rowModel)
 	{

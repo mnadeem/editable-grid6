@@ -34,13 +34,13 @@ public abstract class EditableGridBottomToolbar<T, S> extends AbstractEditableGr
 
 	public EditableGridBottomToolbar(EditableDataTable<?, ?> table, Class<T> clazz){
 		super(table);
+		createNewInstance(clazz);		
 		MarkupContainer td = new WebMarkupContainer("td");
 		td.add(new AttributeModifier("colspan", table.getColumns().size() - 1));
 		AddToolBarForm addToolBarForm = new AddToolBarForm("addToolbarForm");
 		td.add(addToolBarForm);
 		add(td);
 		add(newAddButton(addToolBarForm));
-		createNewInstance(clazz);		
 	}
 
 	protected void onError(AjaxRequestTarget target) {	}

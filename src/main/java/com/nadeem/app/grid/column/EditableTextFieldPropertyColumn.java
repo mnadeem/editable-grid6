@@ -1,5 +1,6 @@
 package com.nadeem.app.grid.column;
 
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 
 public class EditableTextFieldPropertyColumn<T, S> extends AbstractEditablePropertyColumn<T, S>
@@ -21,6 +22,15 @@ public class EditableTextFieldPropertyColumn<T, S> extends AbstractEditablePrope
 	@Override
 	public EditableCellPanel<T> getEditableCellPanel(String componentId)
 	{
-		return new EditableTextFieldCellPanel<T, S>(componentId, this);
+		return new EditableTextFieldCellPanel<T, S>(componentId, this){
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void addBehaviors(FormComponent<T> formComponent) {
+				// TODO Auto-generated method stub
+				EditableTextFieldPropertyColumn.this.addBehaviors(formComponent);
+			}
+		};
 	}
 }

@@ -35,7 +35,6 @@ public abstract class AbstractEditablePropertyColumn<T, S> extends PropertyColum
 			EditableCellPanel<T> provider 		= getEditableCellPanel(componentId);
 			FormComponent<T> editorComponent 	= provider.getEditableComponent();
 			editorComponent.setModel((IModel<T>) getDataModel(rowModel));
-			addBehavior(editorComponent, rowModel);
 			item.add(provider);
 		}
 		else 
@@ -49,7 +48,7 @@ public abstract class AbstractEditablePropertyColumn<T, S> extends PropertyColum
 		return rowItem.getMetaData(EditableGridActionsPanel.EDITING);
 	}
 	 
-	protected void addBehavior(FormComponent<T> editorComponent, IModel<T> rowModel) 
+	protected void addBehaviors(FormComponent<T> editorComponent) 
 	{
 
 	}	

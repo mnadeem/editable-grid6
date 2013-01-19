@@ -37,7 +37,7 @@ public class EditableGridActionsColumn<T, S> extends PropertyColumn<T, S>
 
 			@Override
 			protected void onCancel(AjaxRequestTarget target) {
-
+				EditableGridActionsColumn.this.onCancel(target);		
 			}
 
 			@Override
@@ -61,5 +61,8 @@ public class EditableGridActionsColumn<T, S> extends PropertyColumn<T, S>
 	protected void onError(AjaxRequestTarget target, IModel<T> rowModel)
 	{
 				
+	}
+	protected void onCancel(AjaxRequestTarget target) {
+
 	}
 }
