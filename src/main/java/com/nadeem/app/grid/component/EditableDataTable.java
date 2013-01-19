@@ -3,6 +3,7 @@ import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.DataGridView;
@@ -29,6 +30,8 @@ import com.nadeem.app.grid.column.EditableGridActionsPanel;
 import com.nadeem.app.grid.model.GridOperationData;
 import com.nadeem.app.grid.model.OperationType;
 import com.nadeem.app.grid.provider.IEditableDataProvider;
+import com.nadeem.app.grid.toolbar.AbstractEditableGridToolbar;
+import com.nadeem.app.grid.toolbar.EditableGridBottomToolbar;
 
 /**
  * 
@@ -44,7 +47,7 @@ import com.nadeem.app.grid.provider.IEditableDataProvider;
  */
 public class EditableDataTable<T, S> extends Panel implements IPageableItems
 {
-	static abstract class CssAttributeBehavior extends Behavior
+	public static abstract class CssAttributeBehavior extends Behavior
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -66,7 +69,7 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems
 
 	private static final long serialVersionUID = 1L;
 
-	private final EditableDataGridView<T> datagrid;
+	private final EditableDataGridView<T, S> datagrid;
 
 	private final WebMarkupContainer body;
 
@@ -91,7 +94,7 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems
 	 *            number of rows per page
 	 */
 	public EditableDataTable(final String id, final List<? extends IColumn<T, S>> columns,
-		final IEditableDataProvider<T> dataProvider, final long rowsPerPage) 
+		final IEditableDataProvider<T, S> dataProvider, final long rowsPerPage, Class<T> clazz) 
 	{
 		super(id);
 
@@ -101,7 +104,7 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems
 		this.caption = new Caption("caption", getCaptionModel());
 		add(caption);
 		body = newBodyContainer("body");
-		datagrid = new EditableDataGridView<T>("rows", columns, dataProvider);
+		datagrid = new EditableDataGridView<T, S>("rows", columns, dataProvider);
 
 		datagrid.setItemsPerPage(rowsPerPage);
 		body.add(datagrid);
@@ -110,6 +113,18 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems
 		bottomToolbars = new ToolbarsContainer("bottomToolbars");
 		add(topToolbars);
 		add(bottomToolbars);
+		
+		addBottomToolbar(new EditableGridBottomToolbar<T, S>(this, clazz) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onAdd(T newRow, AjaxRequestTarget target) {
+				getDataProvider().add(newRow);
+				target.add(EditableDataTable.this);
+			}
+			
+		});
 		this.setOutputMarkupId(true);
 	}
 
@@ -154,7 +169,7 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems
 	 * 
 	 * @see AbstractToolbar
 	 */
-	public void addBottomToolbar(final AbstractToolbar toolbar)
+	public void addBottomToolbar(final AbstractEditableGridToolbar toolbar)
 	{
 		addToolbar(toolbar, bottomToolbars);
 	}
@@ -167,7 +182,7 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems
 	 * 
 	 * @see AbstractToolbar
 	 */
-	public void addTopToolbar(final AbstractToolbar toolbar)
+	public void addTopToolbar(final AbstractEditableGridToolbar toolbar)
 	{
 		addToolbar(toolbar, topToolbars);
 	}
@@ -207,9 +222,9 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems
 	/**
 	 * @return dataprovider
 	 */
-	public final IEditableDataProvider<T> getDataProvider()
+	public final IEditableDataProvider<T, S> getDataProvider()
 	{
-		return (IEditableDataProvider<T>) datagrid.getDataProvider();
+		return (IEditableDataProvider<T, S>) datagrid.getDataProvider();
 	}
 
 	/**
@@ -303,7 +318,7 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems
 		return datagrid.getItemCount();
 	}
 
-	private void addToolbar(final AbstractToolbar toolbar, final ToolbarsContainer container)
+	private void addToolbar(final AbstractEditableGridToolbar toolbar, final ToolbarsContainer container)
 	{
 		Args.notNull(toolbar, "toolbar");
 
@@ -452,12 +467,12 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems
 		}
 	}
 	
-	private class EditableDataGridView<R> extends DataGridView<R>
+	private class EditableDataGridView<R, S> extends DataGridView<R>
 	{
 
 		private static final long serialVersionUID = 1L;
 
-		public EditableDataGridView(String id, List<? extends ICellPopulator<R>> populators, IEditableDataProvider<R> dataProvider)
+		public EditableDataGridView(String id, List<? extends ICellPopulator<R>> populators, IEditableDataProvider<R, S> dataProvider)
 		{
 			super(id, populators, dataProvider);
 		}

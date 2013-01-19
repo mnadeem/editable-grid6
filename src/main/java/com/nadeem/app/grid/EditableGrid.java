@@ -14,6 +14,8 @@ import org.apache.wicket.model.Model;
 import com.nadeem.app.grid.column.EditableGridActionsColumn;
 import com.nadeem.app.grid.component.EditableDataTable;
 import com.nadeem.app.grid.provider.IEditableDataProvider;
+import com.nadeem.app.grid.toolbar.EditableGridBottomToolbar;
+import com.nadeem.app.grid.toolbar.EditableGridHeadersToolbar;
 
 public class EditableGrid<T, S> extends Panel
 {
@@ -21,28 +23,30 @@ public class EditableGrid<T, S> extends Panel
 	private static final long serialVersionUID = 1L;
 
 	public EditableGrid(final String id, final List<? extends IColumn<T, S>> columns,
-						final IEditableDataProvider<T> dataProvider, final long rowsPerPage)
+						final IEditableDataProvider<T, S> dataProvider, final long rowsPerPage, Class<T> clazz)
 	{
 		super(id);
 		List<IColumn<T, S>>  newCols = new ArrayList<IColumn<T,S>>();
 		newCols.addAll(columns);
 		newCols.add(newActionsColumn());
 
-		add(buildForm(newCols, dataProvider, rowsPerPage));
+		add(buildForm(newCols, dataProvider, rowsPerPage, clazz));
 	}
 
-	private Component buildForm(final List<? extends IColumn<T, S>> columns, final IEditableDataProvider<T> dataProvider, long rowsPerPage)
+	private Component buildForm(final List<? extends IColumn<T, S>> columns, final IEditableDataProvider<T, S> dataProvider, long rowsPerPage, Class<T> clazz)
 	{
 		Form<T> form = new Form<T>("form");
 		form.setOutputMarkupId(true);
-		form.add(newDataTable(columns, dataProvider, rowsPerPage));
+		form.add(newDataTable(columns, dataProvider, rowsPerPage, clazz));
 		return form;
 	}
 
-	private Component newDataTable(final List<? extends IColumn<T, S>> columns, final IEditableDataProvider<T> dataProvider, long rowsPerPage)
+	private Component newDataTable(final List<? extends IColumn<T, S>> columns, final IEditableDataProvider<T, S> dataProvider, long rowsPerPage, Class<T> clazz)
 	{			
-		EditableDataTable<T, S> dataTable = new EditableDataTable<T, S>("dataTable", columns, dataProvider, rowsPerPage);
+		EditableDataTable<T, S> dataTable = new EditableDataTable<T, S>("dataTable", columns, dataProvider, rowsPerPage, clazz);
 		dataTable.setOutputMarkupId(true);
+		dataTable.addTopToolbar(new EditableGridHeadersToolbar<T, S>(dataTable, dataProvider));
+		
 		return dataTable;
 	}
 
@@ -84,4 +88,5 @@ public class EditableGrid<T, S> extends Panel
 	{
 		
 	}
+	
 }

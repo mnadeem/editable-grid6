@@ -5,10 +5,11 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-public class EditableListDataProvider<T extends Serializable> implements IEditableDataProvider<T>
+public class EditableListDataProvider<T extends Serializable, S> implements IEditableDataProvider<T, S>
 {
 
 	private static final long serialVersionUID = 1L;
@@ -73,5 +74,10 @@ public class EditableListDataProvider<T extends Serializable> implements IEditab
 	public void remove(T item)
 	{
 		list.remove(item);
+	}
+
+	@Override
+	public ISortState<S> getSortState() {
+		return null;
 	}
 }
