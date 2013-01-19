@@ -3,6 +3,7 @@ package com.nadeem.app.grid.toolbar;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -34,6 +35,7 @@ public abstract class EditableGridBottomToolbar<T, S> extends AbstractEditableGr
 	public EditableGridBottomToolbar(EditableDataTable<?, ?> table, Class<T> clazz){
 		super(table);
 		MarkupContainer td = new WebMarkupContainer("td");
+		td.add(new AttributeModifier("colspan", table.getColumns().size() - 1));
 		AddToolBarForm addToolBarForm = new AddToolBarForm("addToolbarForm");
 		td.add(addToolBarForm);
 		add(td);
