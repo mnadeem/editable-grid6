@@ -26,6 +26,8 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
 import com.nadeem.app.grid.column.EditableGridActionsPanel;
+import com.nadeem.app.grid.model.GridOperationData;
+import com.nadeem.app.grid.model.OperationType;
 import com.nadeem.app.grid.provider.IEditableDataProvider;
 
 /**
@@ -107,6 +109,7 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems
 		bottomToolbars = new ToolbarsContainer("bottomToolbars");
 		add(topToolbars);
 		add(bottomToolbars);
+		this.setOutputMarkupId(true);
 	}
 
 	/**
@@ -500,11 +503,24 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems
 	}
 
 	public void onEvent(IEvent<?> event) {
-		if (event.getPayload() instanceof Item) {
+
+		if (event.getPayload() instanceof Item)
+		{
 			@SuppressWarnings("unchecked")
 			Item<T> rowItem = ((Item<T>) event.getPayload());
 			datagrid.refreashItem(rowItem);
 			event.stop();
+		}
+		else if(event.getPayload() instanceof GridOperationData)
+		{
+			@SuppressWarnings("unchecked")
+			GridOperationData<T> gridOperationData = (GridOperationData<T>) event.getPayload();
+			if (null != gridOperationData && OperationType.DELETE.equals(gridOperationData.getOperationType()))
+			{
+				getDataProvider().remove(gridOperationData.getData());
+				event.stop();
+
+			}
 		}
 	}	
 }

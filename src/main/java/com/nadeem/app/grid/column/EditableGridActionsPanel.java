@@ -11,7 +11,10 @@ import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulato
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 
+import com.nadeem.app.grid.component.EditableDataTable;
 import com.nadeem.app.grid.component.EditableGridSubmitLink;
+import com.nadeem.app.grid.model.GridOperationData;
+import com.nadeem.app.grid.model.OperationType;
 
 public abstract class EditableGridActionsPanel<T> extends Panel {
 
@@ -74,8 +77,10 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 				attributes.getAjaxCallListeners().add(listener); 
 			}
 			@Override
-			public void onClick(AjaxRequestTarget target) {
-			
+			public void onClick(AjaxRequestTarget target)
+			{
+				send(getPage(), Broadcast.BREADTH, new GridOperationData<T>(OperationType.DELETE, (T) rowItem.getDefaultModelObject()));
+				target.add(rowItem.findParent(EditableDataTable.class));
 			}
 		};
 		
