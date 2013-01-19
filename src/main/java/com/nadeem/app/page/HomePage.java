@@ -33,7 +33,7 @@ public class HomePage extends WebPage
 		
 		add(feedbackPanel);
 
-		add(new EditableGrid<Person, String>("grid", getColumns(), new EditableListDataProvider<Person, String>(getPersons()), 10, Person.class)
+		add(new EditableGrid<Person, String>("grid", getColumns(), new EditableListDataProvider<Person, String>(getPersons()), 5, Person.class)
 		{
 			private static final long serialVersionUID = 1L;
 

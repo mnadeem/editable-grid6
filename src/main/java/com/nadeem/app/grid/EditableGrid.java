@@ -16,6 +16,7 @@ import com.nadeem.app.grid.component.EditableDataTable;
 import com.nadeem.app.grid.provider.IEditableDataProvider;
 import com.nadeem.app.grid.toolbar.EditableGridBottomToolbar;
 import com.nadeem.app.grid.toolbar.EditableGridHeadersToolbar;
+import com.nadeem.app.grid.toolbar.EditableGridNavigationToolbar;
 
 public class EditableGrid<T, S> extends Panel
 {
@@ -54,6 +55,7 @@ public class EditableGrid<T, S> extends Panel
 		};
 		dataTable.setOutputMarkupId(true);
 		
+		dataTable.addTopToolbar(new EditableGridNavigationToolbar(dataTable));		
 		dataTable.addTopToolbar(new EditableGridHeadersToolbar<T, S>(dataTable, dataProvider));
 		
 		return dataTable;
