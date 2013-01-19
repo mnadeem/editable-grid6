@@ -123,6 +123,11 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems
 				getDataProvider().add(newRow);
 				target.add(EditableDataTable.this);
 			}
+			@Override
+			protected void onError(AjaxRequestTarget target) {
+				super.onError(target);
+				EditableDataTable.this.onError(target);
+			}
 			
 		});
 		this.setOutputMarkupId(true);
@@ -543,5 +548,8 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems
 
 			}
 		}
-	}	
+	}
+	protected void onError(AjaxRequestTarget target) {
+		
+	}
 }

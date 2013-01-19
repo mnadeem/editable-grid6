@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -30,19 +31,23 @@ public abstract class EditableGridBottomToolbar<T, S> extends AbstractEditableGr
 	
 	protected abstract void onAdd(T newRow, AjaxRequestTarget target);
 
-	public EditableGridBottomToolbar(EditableDataTable<?, ?> table, Class<T> clzz){
+	public EditableGridBottomToolbar(EditableDataTable<?, ?> table, Class<T> clazz){
 		super(table);
-		add(new AddToolBarForm("addToolbarForm"));
-		createNewInstance(clzz);		
+		MarkupContainer td = new WebMarkupContainer("td");
+		AddToolBarForm addToolBarForm = new AddToolBarForm("addToolbarForm");
+		td.add(addToolBarForm);
+		add(td);
+		add(newAddButton(addToolBarForm));
+		createNewInstance(clazz);		
 	}
 
 	protected void onError(AjaxRequestTarget target) {	}
 
 	//TODO: use Objenesis instead of the following
 	@SuppressWarnings("unchecked")
-	private void createNewInstance(Class<T> clzz) {
+	private void createNewInstance(Class<T> clazz) {
 		try {
-			newRow = clzz.newInstance();
+			newRow = (T) clazz.newInstance();
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -52,14 +57,13 @@ public abstract class EditableGridBottomToolbar<T, S> extends AbstractEditableGr
 		}
 	}
 	
-	private class AddToolBarForm extends Form implements IFormVisitorParticipant {
+	private class AddToolBarForm extends Form<T> implements IFormVisitorParticipant {
 
 		private static final long serialVersionUID = 1L;
 
 		public AddToolBarForm(String id) {
 			super(id);
 			add(newEditorComponents());
-			add(newAddButton(this));
 		}
 		public boolean processChildren() {
 			IFormSubmitter submitter = getRootForm().findSubmittingButton();

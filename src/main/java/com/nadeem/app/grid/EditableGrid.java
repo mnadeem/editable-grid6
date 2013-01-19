@@ -43,8 +43,17 @@ public class EditableGrid<T, S> extends Panel
 
 	private Component newDataTable(final List<? extends IColumn<T, S>> columns, final IEditableDataProvider<T, S> dataProvider, long rowsPerPage, Class<T> clazz)
 	{			
-		EditableDataTable<T, S> dataTable = new EditableDataTable<T, S>("dataTable", columns, dataProvider, rowsPerPage, clazz);
+		EditableDataTable<T, S> dataTable = new EditableDataTable<T, S>("dataTable", columns, dataProvider, rowsPerPage, clazz) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onError(AjaxRequestTarget target) {
+				EditableGrid.this.onError(target);
+			}
+		};
 		dataTable.setOutputMarkupId(true);
+		
 		dataTable.addTopToolbar(new EditableGridHeadersToolbar<T, S>(dataTable, dataProvider));
 		
 		return dataTable;

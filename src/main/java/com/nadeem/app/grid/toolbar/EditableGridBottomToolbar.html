@@ -6,18 +6,23 @@
 	</head>
 	<body>
 		<wicket:panel>
-			<form wicket:id ="addToolbarForm">	
+			
 				<tr>
 					
-					<td wicket:id="cells">
-						<div wicket:id="cell">[cell data]</div>
-					</td>					
+						<td wicket:id="td" colspan="3">
+							<form wicket:id ="addToolbarForm">
+								<span wicket:id="cells">
+									<span wicket:id="cell">[cell data]</span>
+								</span>								
+							</form>	
+						</td>
+						
 					<td>							
 						<a wicket:id="add" href="#">Add</a> 
 					</td>
 					
 				</tr>
-			</form>			
+			
 		</wicket:panel>
 	</body>
 </html>
