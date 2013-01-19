@@ -2,27 +2,33 @@ package com.nadeem.app.grid.model;
 
 import java.io.Serializable;
 
-public class GridOperationData<D> implements Serializable {
+public class GridOperationData<D> implements Serializable
+{
 
 	private static final long serialVersionUID = 1L;
 	private OperationType operationType;
 	private D data;
 
-	public GridOperationData(final OperationType newOperationType, final D newData) {
+	public GridOperationData(final OperationType newOperationType, final D newData)
+	{
 		this.operationType = newOperationType;
 		this.data			=  newData;
 	}
 	
-	public OperationType getOperationType() {
+	public OperationType getOperationType()
+	{
 		return operationType;
 	}
-	public void setOperationType(OperationType operationType) {
+	public void setOperationType(OperationType operationType)
+	{
 		this.operationType = operationType;
 	}
-	public D getData() {
+	public D getData()
+	{
 		return data;
 	}
-	public void setData(D data) {
+	public void setData(D data)
+	{
 		this.data = data;
 	}
 }

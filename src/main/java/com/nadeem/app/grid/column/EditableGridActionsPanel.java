@@ -18,7 +18,8 @@ import com.nadeem.app.grid.model.OperationType;
 
 public abstract class EditableGridActionsPanel<T> extends Panel {
 
-	public final static MetaDataKey<Boolean> EDITING 	= new MetaDataKey<Boolean>() {
+	public final static MetaDataKey<Boolean> EDITING 	= new MetaDataKey<Boolean>()
+	{
 		private static final long serialVersionUID = 1L;
 	};
 
@@ -29,28 +30,33 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 	protected abstract void onCancel(AjaxRequestTarget target);
 	protected abstract void onDelete(AjaxRequestTarget target);
 
-	public EditableGridActionsPanel(String id, final Item<ICellPopulator<T>> cellItem) {
+	public EditableGridActionsPanel(String id, final Item<ICellPopulator<T>> cellItem)
+	{
 		super(id);
 
 		@SuppressWarnings("unchecked")
 		final Item<T> rowItem = ((Item<T>) cellItem.findParent(Item.class));
 
-		AjaxLink<String> editLink = new AjaxLink<String>("edit") {
+		AjaxLink<String> editLink = new AjaxLink<String>("edit") 
+		{
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick(AjaxRequestTarget target) {							
+			public void onClick(AjaxRequestTarget target)
+			{							
 				rowItem.setMetaData(EDITING, Boolean.TRUE);
 				send(getPage(), Broadcast.BREADTH, rowItem);
 				target.add(rowItem);
 			}
 			@Override
-			public boolean isVisible() {
+			public boolean isVisible()
+			{
 				return !isThisRowBeingEdited(rowItem);
 			}
 		};
-		AjaxLink<String> cancelLink = new AjaxLink<String>("cancel") {
+		AjaxLink<String> cancelLink = new AjaxLink<String>("cancel")
+		{
 
 			private static final long serialVersionUID = 1L;
 
@@ -62,15 +68,18 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 				onCancel(target);
 			}
 			@Override
-			public boolean isVisible() {
+			public boolean isVisible() 
+			{
 				return isThisRowBeingEdited(rowItem);
 			}
 		};
-		AjaxLink<String> deleteLink = new AjaxLink<String>("delete") {
+		AjaxLink<String> deleteLink = new AjaxLink<String>("delete") 
+		{
 
 			private static final long serialVersionUID = 1L;
 			@Override
-			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+			protected void updateAjaxAttributes(AjaxRequestAttributes attributes)
+			{
 				super.updateAjaxAttributes(attributes);
 				AjaxCallListener listener = new AjaxCallListener(); 
 				listener.onPrecondition("if(!confirm('Do you really want to delete?')){return false;}"); 
@@ -84,16 +93,19 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 			}
 		};
 		
-		AjaxSubmitLink saveLink = new EditableGridSubmitLink("save", rowItem) {
+		AjaxSubmitLink saveLink = new EditableGridSubmitLink("save", rowItem) 
+		{
 
 			private static final long serialVersionUID = 1L;
 		
 			@Override
-			public boolean isVisible() {
+			public boolean isVisible()
+			{
 				return isThisRowBeingEdited(rowItem);
 			}
 			@Override
-			protected void onSuccess(AjaxRequestTarget target) {
+			protected void onSuccess(AjaxRequestTarget target)
+			{
 				rowItem.setMetaData(EDITING, Boolean.FALSE);
 				send(getPage(), Broadcast.BREADTH, rowItem);
 				target.add(rowItem);
@@ -101,7 +113,8 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 				
 			}
 			@Override
-			protected void onError(AjaxRequestTarget target) {
+			protected void onError(AjaxRequestTarget target)
+			{
 				EditableGridActionsPanel.this.onError(target);
 			}
 		};
@@ -112,7 +125,8 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 		add(deleteLink);
 	}
 	
-	private boolean isThisRowBeingEdited(Item<T> rowItem) {
+	private boolean isThisRowBeingEdited(Item<T> rowItem)
+	{
 		return rowItem.getMetaData(EDITING);
 	}
 

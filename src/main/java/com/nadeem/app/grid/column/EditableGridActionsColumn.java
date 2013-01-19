@@ -6,18 +6,22 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColu
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
-public class EditableGridActionsColumn<T, S> extends PropertyColumn<T, S> {
+public class EditableGridActionsColumn<T, S> extends PropertyColumn<T, S>
+{
 
-	public EditableGridActionsColumn(IModel<String> displayModel) {
+	public EditableGridActionsColumn(IModel<String> displayModel)
+	{
 		super(displayModel, "");		
 	}
 
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public void populateItem(final Item<ICellPopulator<T>> item, final String componentId, final IModel<T> rowModel) {
+	public void populateItem(final Item<ICellPopulator<T>> item, final String componentId, final IModel<T> rowModel)
+	{
 
-		item.add(new EditableGridActionsPanel<T>(componentId, item) {
+		item.add(new EditableGridActionsPanel<T>(componentId, item)
+		{
 
 			private static final long serialVersionUID = 1L;
 
@@ -44,15 +48,18 @@ public class EditableGridActionsColumn<T, S> extends PropertyColumn<T, S> {
 		});		
 	}
 
-	protected void onDelete(AjaxRequestTarget target, IModel<T> rowModel) {				
+	protected void onDelete(AjaxRequestTarget target, IModel<T> rowModel)
+	{				
 		
 	}
 
-	protected void onSave(AjaxRequestTarget target, IModel<T> rowModel) {
+	protected void onSave(AjaxRequestTarget target, IModel<T> rowModel)
+	{
 				
 	}
 
-	protected void onError(AjaxRequestTarget target, IModel<T> rowModel) {
+	protected void onError(AjaxRequestTarget target, IModel<T> rowModel)
+	{
 				
 	}
 }

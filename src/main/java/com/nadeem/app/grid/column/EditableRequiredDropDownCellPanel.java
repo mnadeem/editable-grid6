@@ -6,11 +6,13 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColu
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.FormComponent;
 
-public class EditableRequiredDropDownCellPanel<T, S> extends EditableCellPanel<T> {
+public class EditableRequiredDropDownCellPanel<T, S> extends EditableCellPanel<T>
+{
 
 	private static final long serialVersionUID = 1L;
 
-	public EditableRequiredDropDownCellPanel(final String id, final PropertyColumn<T, S> column, @SuppressWarnings("rawtypes") final List choices) {
+	public EditableRequiredDropDownCellPanel(final String id, final PropertyColumn<T, S> column, @SuppressWarnings("rawtypes") final List choices)
+	{
 		super(id);
 
 		@SuppressWarnings("unchecked")
@@ -21,7 +23,8 @@ public class EditableRequiredDropDownCellPanel<T, S> extends EditableCellPanel<T
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public FormComponent<T> getEditableComponent() {
+	public FormComponent<T> getEditableComponent()
+	{
 		return (FormComponent<T>) get("dropdown");
 	}
 }

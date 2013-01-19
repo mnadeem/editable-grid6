@@ -91,7 +91,8 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems
 	 *            number of rows per page
 	 */
 	public EditableDataTable(final String id, final List<? extends IColumn<T, S>> columns,
-		final IEditableDataProvider<T> dataProvider, final long rowsPerPage) {
+		final IEditableDataProvider<T> dataProvider, final long rowsPerPage) 
+	{
 		super(id);
 
 		Args.notEmpty(columns, "columns");
@@ -451,11 +452,13 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems
 		}
 	}
 	
-	private class EditableDataGridView<R> extends DataGridView<R> {
+	private class EditableDataGridView<R> extends DataGridView<R>
+	{
 
 		private static final long serialVersionUID = 1L;
 
-		public EditableDataGridView(String id, List<? extends ICellPopulator<R>> populators, IEditableDataProvider<R> dataProvider) {
+		public EditableDataGridView(String id, List<? extends ICellPopulator<R>> populators, IEditableDataProvider<R> dataProvider)
+		{
 			super(id, populators, dataProvider);
 		}
 	
@@ -481,7 +484,8 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems
 			return item;
 		}
 		@Override
-		protected Item<R> newRowItem(String id, int index, IModel<R> model) {
+		protected Item<R> newRowItem(String id, int index, IModel<R> model)
+		{
 			return new RowItem<R>(id, index, model);
 		}
 
@@ -490,7 +494,8 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems
 			populateItem(rowItem);
 		}
 
-		public class RowItem<RI> extends Item<RI> {
+		public class RowItem<RI> extends Item<RI>
+		{
 
 			private static final long serialVersionUID = 1L;
 			
@@ -502,7 +507,8 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems
 		}		
 	}
 
-	public void onEvent(IEvent<?> event) {
+	public void onEvent(IEvent<?> event) 
+	{
 
 		if (event.getPayload() instanceof Item)
 		{

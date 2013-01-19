@@ -4,11 +4,13 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColu
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
 
-public class EditableTextFieldCellPanel<T, S> extends EditableCellPanel<T> {
+public class EditableTextFieldCellPanel<T, S> extends EditableCellPanel<T>
+{
 
 	private static final long serialVersionUID = 1L;
 
-	public EditableTextFieldCellPanel(String id, PropertyColumn<T, S> column) {
+	public EditableTextFieldCellPanel(String id, PropertyColumn<T, S> column)
+	{
 		super(id);
 		
 		TextField<T> field = new TextField<T>("textfield");
@@ -19,11 +21,13 @@ public class EditableTextFieldCellPanel<T, S> extends EditableCellPanel<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public FormComponent<T> getEditableComponent() {
+	public FormComponent<T> getEditableComponent()
+	{
 		return (FormComponent<T>) get("textfield");
 	}
 
-	protected void addBehaviors(FormComponent<T> formComponent) {
+	protected void addBehaviors(FormComponent<T> formComponent)
+	{
 		
 	}
 }

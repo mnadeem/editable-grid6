@@ -29,7 +29,6 @@ public class WicketApplication extends WebApplication
 	{
 		super.init();
 		getMarkupSettings().setStripWicketTags(true);
-
 		// add your configuration here
 	}
 }
