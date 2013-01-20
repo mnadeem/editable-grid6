@@ -27,6 +27,7 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
 import com.nadeem.app.grid.column.EditableGridActionsPanel;
+import com.nadeem.app.grid.column.IColumnProvider;
 import com.nadeem.app.grid.model.GridOperationData;
 import com.nadeem.app.grid.model.OperationType;
 import com.nadeem.app.grid.provider.IEditableDataProvider;
@@ -45,28 +46,8 @@ import com.nadeem.app.grid.toolbar.EditableGridBottomToolbar;
  * @param <S>
  *            the type of the sorting parameter
  */
-public class EditableDataTable<T, S> extends Panel implements IPageableItems
+public class EditableDataTable<T, S> extends Panel implements IPageableItems, IColumnProvider<T, S>
 {
-	public static abstract class CssAttributeBehavior extends Behavior
-	{
-		private static final long serialVersionUID = 1L;
-
-		protected abstract String getCssClass();
-
-		/**
-		 * @see Behavior#onComponentTag(Component, ComponentTag)
-		 */
-		@Override
-		public void onComponentTag(final Component component, final ComponentTag tag)
-		{
-			String className = getCssClass();
-			if (!Strings.isEmpty(className))
-			{
-				tag.append("class", className, " ");
-			}
-		}
-	}
-
 	private static final long serialVersionUID = 1L;
 
 	private final EditableDataGridView<T, S> datagrid;
@@ -86,34 +67,41 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems
 	 * 
 	 * @param id
 	 *            component id
-	 * @param columns
+	 * @param newColumns
 	 *            list of IColumn objects
 	 * @param dataProvider
 	 *            imodel for data provider
 	 * @param rowsPerPage
 	 *            number of rows per page
 	 */
-	public EditableDataTable(final String id, final List<? extends IColumn<T, S>> columns,
+	public EditableDataTable(final String id, final List<? extends IColumn<T, S>> newColumns,
 		final IEditableDataProvider<T, S> dataProvider, final long rowsPerPage, Class<T> clazz) 
 	{
 		super(id);
 
-		Args.notEmpty(columns, "columns");
+		Args.notEmpty(newColumns, "columns");
 
-		this.columns = columns;
-		this.caption = new Caption("caption", getCaptionModel());
-		add(caption);
-		body = newBodyContainer("body");
-		datagrid = new EditableDataGridView<T, S>("rows", columns, dataProvider);
+		this.columns 		= newColumns;
+		this.caption 		= new Caption("caption", getCaptionModel());	
+		this.body 			= newBodyContainer("body");
+		this.datagrid   	= newDataGrid(newColumns, dataProvider, rowsPerPage);
+		this.topToolbars 	= new ToolbarsContainer("topToolbars");
+		this.bottomToolbars = new ToolbarsContainer("bottomToolbars");
 
-		datagrid.setItemsPerPage(rowsPerPage);
-		body.add(datagrid);
-		add(body);
-		topToolbars = new ToolbarsContainer("topToolbars");
-		bottomToolbars = new ToolbarsContainer("bottomToolbars");
-		add(topToolbars);
-		add(bottomToolbars);
-		
+		this.body.add(datagrid);
+		add(this.caption);
+		add(this.body);
+
+		add(this.topToolbars);
+		add(this.bottomToolbars);
+
+		init(clazz);
+	}
+
+	private void init(Class<T> clazz)
+	{
+		this.setOutputMarkupId(true);
+	
 		addBottomToolbar(new EditableGridBottomToolbar<T, S>(this, clazz) {
 
 			private static final long serialVersionUID = 1L;
@@ -130,7 +118,16 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems
 			}
 			
 		});
-		this.setOutputMarkupId(true);
+	}
+
+	private EditableDataGridView<T, S> newDataGrid(final List<? extends IColumn<T, S>> columns,
+			final IEditableDataProvider<T, S> dataProvider,
+			final long rowsPerPage)
+	{
+		EditableDataGridView<T, S> datagrid 	= new EditableDataGridView<T, S>("rows", columns, dataProvider);
+
+		datagrid.setItemsPerPage(rowsPerPage);
+		return datagrid;
 	}
 
 	/**
@@ -550,6 +547,27 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems
 			}
 		}
 	}
+
+	public static abstract class CssAttributeBehavior extends Behavior
+	{
+		private static final long serialVersionUID = 1L;
+
+		protected abstract String getCssClass();
+
+		/**
+		 * @see Behavior#onComponentTag(Component, ComponentTag)
+		 */
+		@Override
+		public void onComponentTag(final Component component, final ComponentTag tag)
+		{
+			String className = getCssClass();
+			if (!Strings.isEmpty(className))
+			{
+				tag.append("class", className, " ");
+			}
+		}
+	}
+	
 	protected void onError(AjaxRequestTarget target) {
 		
 	}
