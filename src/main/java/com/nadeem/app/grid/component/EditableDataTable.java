@@ -470,7 +470,7 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems, IC
 		}
 	}
 	
-	private class EditableDataGridView<R, U> extends DataGridView<R>
+	private class EditableDataGridView<R, U> extends DataGridView<R> implements IItemRefreashable<R>
 	{
 
 		private static final long serialVersionUID = 1L;
@@ -507,7 +507,7 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems, IC
 			return new RowItem<R>(id, index, model);
 		}
 
-		public void refreashItem(Item<R> rowItem) {
+		public void refreash(Item<R> rowItem) {
 			rowItem.removeAll();
 			populateItem(rowItem);
 		}
@@ -532,10 +532,10 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems, IC
 		{
 			@SuppressWarnings("unchecked")
 			Item<T> rowItem = ((Item<T>) event.getPayload());
-			datagrid.refreashItem(rowItem);
+			this.datagrid.refreash(rowItem);
 			event.stop();
 		}
-		else if(event.getPayload() instanceof GridOperationData)
+		else if (event.getPayload() instanceof GridOperationData)
 		{
 			@SuppressWarnings("unchecked")
 			GridOperationData<T> gridOperationData = (GridOperationData<T>) event.getPayload();
@@ -543,7 +543,6 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems, IC
 			{
 				getDataProvider().remove(gridOperationData.getData());
 				event.stop();
-
 			}
 		}
 	}
