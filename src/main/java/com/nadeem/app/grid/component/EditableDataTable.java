@@ -470,12 +470,12 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems, IC
 		}
 	}
 	
-	private class EditableDataGridView<R, S> extends DataGridView<R>
+	private class EditableDataGridView<R, U> extends DataGridView<R>
 	{
 
 		private static final long serialVersionUID = 1L;
 
-		public EditableDataGridView(String id, List<? extends ICellPopulator<R>> populators, IEditableDataProvider<R, S> dataProvider)
+		public EditableDataGridView(String id, List<? extends ICellPopulator<R>> populators, IEditableDataProvider<R, U> dataProvider)
 		{
 			super(id, populators, dataProvider);
 		}
@@ -485,7 +485,7 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems, IC
 		protected Item newCellItem(final String id, final int index, final IModel model)
 		{
 			Item item = EditableDataTable.this.newCellItem(id, index, model);
-			final IColumn<R, S> column = (IColumn<R, S>) EditableDataTable.this.columns.get(index);
+			final IColumn<R, U> column = (IColumn<R, U>) EditableDataTable.this.columns.get(index);
 			if (column instanceof IStyledColumn)
 			{
 				item.add(new CssAttributeBehavior()
@@ -495,7 +495,7 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems, IC
 					@Override
 					protected String getCssClass()
 					{
-						return ((IStyledColumn<T, S>)column).getCssClass();
+						return ((IStyledColumn<R, U>)column).getCssClass();
 					}
 				});
 			}
