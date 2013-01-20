@@ -5,7 +5,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxCallListener;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -16,11 +15,11 @@ import com.nadeem.app.grid.component.EditableGridSubmitLink;
 import com.nadeem.app.grid.model.GridOperationData;
 import com.nadeem.app.grid.model.OperationType;
 
-public abstract class EditableGridActionsPanel<T> extends Panel {
-
-	public final static MetaDataKey<Boolean> EDITING 	= new MetaDataKey<Boolean>()
+public abstract class EditableGridActionsPanel<T> extends Panel
+{
+	public final static MetaDataKey<Boolean> EDITING = new MetaDataKey<Boolean>()
 	{
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID 	= 1L;
 	};
 
 	private static final long serialVersionUID = 1L;
@@ -36,65 +35,16 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 
 		@SuppressWarnings("unchecked")
 		final Item<T> rowItem = ((Item<T>) cellItem.findParent(Item.class));
-
-		AjaxLink<String> editLink = new AjaxLink<String>("edit") 
-		{
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target)
-			{							
-				rowItem.setMetaData(EDITING, Boolean.TRUE);
-				send(getPage(), Broadcast.BREADTH, rowItem);
-				target.add(rowItem);
-			}
-			@Override
-			public boolean isVisible()
-			{
-				return !isThisRowBeingEdited(rowItem);
-			}
-		};
-		AjaxLink<String> cancelLink = new AjaxLink<String>("cancel")
-		{
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				rowItem.setMetaData(EDITING, Boolean.FALSE);
-				send(getPage(), Broadcast.BREADTH, rowItem);
-				target.add(rowItem);
-				onCancel(target);
-			}
-			@Override
-			public boolean isVisible() 
-			{
-				return isThisRowBeingEdited(rowItem);
-			}
-		};
-		AjaxLink<String> deleteLink = new AjaxLink<String>("delete") 
-		{
-
-			private static final long serialVersionUID = 1L;
-			@Override
-			protected void updateAjaxAttributes(AjaxRequestAttributes attributes)
-			{
-				super.updateAjaxAttributes(attributes);
-				AjaxCallListener listener = new AjaxCallListener(); 
-				listener.onPrecondition("if(!confirm('Do you really want to delete?')){return false;}"); 
-				attributes.getAjaxCallListeners().add(listener); 
-			}
-			@SuppressWarnings("unchecked")
-			@Override
-			public void onClick(AjaxRequestTarget target)
-			{
-				send(getPage(), Broadcast.BREADTH, new GridOperationData<T>(OperationType.DELETE, (T) rowItem.getDefaultModelObject()));
-				target.add(rowItem.findParent(EditableDataTable.class));
-			}
-		};
 		
-		AjaxSubmitLink saveLink = new EditableGridSubmitLink("save", rowItem) 
+		add(newEditLink(rowItem));
+		add(newSaveLink(rowItem));
+		add(newCancelLink(rowItem));
+		add(newDeleteLink(rowItem));
+	}
+
+	private EditableGridSubmitLink newSaveLink(final Item<T> rowItem)
+	{
+		return new EditableGridSubmitLink("save", rowItem) 
 		{
 
 			private static final long serialVersionUID = 1L;
@@ -119,16 +69,78 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 				EditableGridActionsPanel.this.onError(target);
 			}
 		};
-		
-		add(editLink);
-		add(saveLink);
-		add(cancelLink);
-		add(deleteLink);
+	}
+
+	private AjaxLink<String> newDeleteLink(final Item<T> rowItem)
+	{
+		return new AjaxLink<String>("delete") 
+		{
+
+			private static final long serialVersionUID = 1L;
+			@Override
+			protected void updateAjaxAttributes(AjaxRequestAttributes attributes)
+			{
+				super.updateAjaxAttributes(attributes);
+				AjaxCallListener listener = new AjaxCallListener(); 
+				listener.onPrecondition("if(!confirm('Do you really want to delete?')){return false;}"); 
+				attributes.getAjaxCallListeners().add(listener); 
+			}
+			@SuppressWarnings("unchecked")
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				send(getPage(), Broadcast.BREADTH, new GridOperationData<T>(OperationType.DELETE, (T) rowItem.getDefaultModelObject()));
+				target.add(rowItem.findParent(EditableDataTable.class));
+			}
+		};
+	}
+
+	private AjaxLink<String> newCancelLink(final Item<T> rowItem)
+	{
+		return new AjaxLink<String>("cancel")
+		{
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				rowItem.setMetaData(EDITING, Boolean.FALSE);
+				send(getPage(), Broadcast.BREADTH, rowItem);
+				target.add(rowItem);
+				onCancel(target);
+			}
+			@Override
+			public boolean isVisible() 
+			{
+				return isThisRowBeingEdited(rowItem);
+			}
+		};
+	}
+
+	private AjaxLink<String> newEditLink(final Item<T> rowItem)
+	{
+		return new AjaxLink<String>("edit") 
+		{
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{							
+				rowItem.setMetaData(EDITING, Boolean.TRUE);
+				send(getPage(), Broadcast.BREADTH, rowItem);
+				target.add(rowItem);
+			}
+			@Override
+			public boolean isVisible()
+			{
+				return !isThisRowBeingEdited(rowItem);
+			}
+		};
 	}
 	
 	private boolean isThisRowBeingEdited(Item<T> rowItem)
 	{
 		return rowItem.getMetaData(EDITING);
 	}
-
 }

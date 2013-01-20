@@ -22,7 +22,8 @@ import com.nadeem.app.grid.column.EditableCellPanel;
 import com.nadeem.app.grid.component.EditableDataTable;
 import com.nadeem.app.grid.component.EditableGridSubmitLink;
 
-public abstract class EditableGridBottomToolbar<T, S> extends AbstractEditableGridToolbar {
+public abstract class EditableGridBottomToolbar<T, S> extends AbstractEditableGridToolbar
+{
 
 	private static final long serialVersionUID 	= 1L;
 	private static final String CELL_ID 		= "cell";
@@ -32,7 +33,8 @@ public abstract class EditableGridBottomToolbar<T, S> extends AbstractEditableGr
 	
 	protected abstract void onAdd(T newRow, AjaxRequestTarget target);
 
-	public EditableGridBottomToolbar(EditableDataTable<?, ?> table, Class<T> clazz){
+	public EditableGridBottomToolbar(EditableDataTable<?, ?> table, Class<T> clazz)
+	{
 		super(table);
 		createNewInstance(clazz);		
 		MarkupContainer td = new WebMarkupContainer("td");
@@ -46,72 +48,89 @@ public abstract class EditableGridBottomToolbar<T, S> extends AbstractEditableGr
 	protected void onError(AjaxRequestTarget target) {	}
 
 	//TODO: use Objenesis instead of the following
-	@SuppressWarnings("unchecked")
-	private void createNewInstance(Class<T> clazz) {
-		try {
+
+	private void createNewInstance(Class<T> clazz) 
+	{
+		try
+		{
 			newRow = (T) clazz.newInstance();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
+		}
+		catch (InstantiationException e)
+		{
 			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
+		}
+		catch (IllegalAccessException e)
+		{
 			e.printStackTrace();
 		}
 	}
 	
-	private class AddToolBarForm extends Form<T> implements IFormVisitorParticipant {
+	private class AddToolBarForm extends Form<T> implements IFormVisitorParticipant
+	{
 
 		private static final long serialVersionUID = 1L;
 
-		public AddToolBarForm(String id) {
+		public AddToolBarForm(String id)
+		{
 			super(id);
 			add(newEditorComponents());
 		}
-		public boolean processChildren() {
+		public boolean processChildren()
+		{
 			IFormSubmitter submitter = getRootForm().findSubmittingButton();
             return submitter != null && submitter.getForm() == this;
 		}		
 	}
 
-	private Component newAddButton(WebMarkupContainer encapsulatingContainer) {
+	private Component newAddButton(WebMarkupContainer encapsulatingContainer)
+	{
 		return new EditableGridSubmitLink("add", encapsulatingContainer) {
 
 			private static final long serialVersionUID = 1L;		
+			@SuppressWarnings("unchecked")
 			@Override
-			protected void onSuccess(AjaxRequestTarget target) {
+			protected void onSuccess(AjaxRequestTarget target)
+			{
 				onAdd(newRow, target);
 				createNewInstance((Class<T>) newRow.getClass());
 				target.add(getTable());
 				
 			}
 			@Override
-			protected void onError(AjaxRequestTarget target) {				
+			protected void onError(AjaxRequestTarget target)
+			{				
 				EditableGridBottomToolbar.this.onError(target);
 			}
 		};
 	}
 	
-	private Loop newEditorComponents() {
+	private Loop newEditorComponents()
+	{
 		final List<AbstractEditablePropertyColumn<T, S>> columns = getEditableColumns();
-		return new Loop(CELLS_ID, columns.size() ) {
+		return new Loop(CELLS_ID, columns.size())
+		{
 
 			private static final long serialVersionUID 	= 	1L;
 
-			protected void populateItem(LoopItem item) {
+			protected void populateItem(LoopItem item)
+			{
 				addEditorComponent(item, getEditorColumn(columns, item.getIndex()));
 			}
 		};
 	}
 
-	private void addEditorComponent(LoopItem item, AbstractEditablePropertyColumn<T, S> toolBarCell) {
+	private void addEditorComponent(LoopItem item, AbstractEditablePropertyColumn<T, S> toolBarCell)
+	{
 		item.add(newCell(toolBarCell));		
 	}
 
 	@SuppressWarnings("unchecked")
-	private List<AbstractEditablePropertyColumn<T, S>> getEditableColumns() {
+	private List<AbstractEditablePropertyColumn<T, S>> getEditableColumns()
+	{
 		 List<AbstractEditablePropertyColumn<T, S>> columns = new ArrayList<AbstractEditablePropertyColumn<T, S>>();
-		 for (IColumn column : getTable().getColumns()) {
-			if (column instanceof AbstractEditablePropertyColumn) {
+		 for (IColumn<?, ?> column : getTable().getColumns()) {
+			if (column instanceof AbstractEditablePropertyColumn)
+			{
 				columns.add((AbstractEditablePropertyColumn<T, S>)column);
 			}
 			
@@ -120,14 +139,16 @@ public abstract class EditableGridBottomToolbar<T, S> extends AbstractEditableGr
 		 return columns;
 	}	
 
-	private Component newCell(AbstractEditablePropertyColumn<T, S> editableGridColumn) {
+	private Component newCell(AbstractEditablePropertyColumn<T, S> editableGridColumn)
+	{
 		EditableCellPanel<T> panel 			= editableGridColumn.getEditableCellPanel(CELL_ID);
 		FormComponent<T> editorComponent 	= panel.getEditableComponent();
 		editorComponent.setModel(new PropertyModel<T>(newRow , editableGridColumn.getPropertyExpression()));
 		return panel;
 	}
 
-	private AbstractEditablePropertyColumn<T, S> getEditorColumn(final List<AbstractEditablePropertyColumn<T, S>> editorColumn, int index) {
+	private AbstractEditablePropertyColumn<T, S> getEditorColumn(final List<AbstractEditablePropertyColumn<T, S>> editorColumn, int index)
+	{
 		return editorColumn.get(index);
 	}
 }

@@ -17,7 +17,8 @@ import org.apache.wicket.model.Model;
 import com.nadeem.app.grid.component.EditableDataTable;
 import com.nadeem.app.grid.component.EditableDataTable.CssAttributeBehavior;
 
-public class EditableGridHeadersToolbar<T, S> extends AbstractEditableGridToolbar {
+public class EditableGridHeadersToolbar<T, S> extends AbstractEditableGridToolbar
+{
 
 		private static final long serialVersionUID = 1L;
 
@@ -31,7 +32,7 @@ public class EditableGridHeadersToolbar<T, S> extends AbstractEditableGridToolba
 		 * @param stateLocator
 		 *            locator for the ISortState implementation used by sortable headers
 		 */
-		public <T> EditableGridHeadersToolbar(final EditableDataTable<T, S> table, final ISortStateLocator<S> stateLocator)
+		public EditableGridHeadersToolbar(final EditableDataTable<T, S> table, final ISortStateLocator<S> stateLocator)
 		{
 			super(table);
 
@@ -119,5 +120,3 @@ public class EditableGridHeadersToolbar<T, S> extends AbstractEditableGridToolba
 			};
 		}
 }
-
-

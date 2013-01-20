@@ -38,20 +38,23 @@ public class HomePage extends WebPage
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onError(AjaxRequestTarget target) {
+			protected void onError(AjaxRequestTarget target)
+			{
 				target.add(feedbackPanel);
 			}
 			@Override
-			protected void onCancel(AjaxRequestTarget target) {
+			protected void onCancel(AjaxRequestTarget target)
+			{
 				target.add(feedbackPanel);
 			}
 			@Override
-			protected void onDelete(AjaxRequestTarget target,
-					IModel<Person> rowModel) {
+			protected void onDelete(AjaxRequestTarget target, IModel<Person> rowModel)
+			{
 				target.add(feedbackPanel);
 			}
 			@Override
-			protected void onSave(AjaxRequestTarget target, IModel<Person> rowModel) {
+			protected void onSave(AjaxRequestTarget target, IModel<Person> rowModel)
+			{
 				target.add(feedbackPanel);
 			}
 		});

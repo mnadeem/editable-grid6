@@ -14,7 +14,6 @@ import org.apache.wicket.model.Model;
 import com.nadeem.app.grid.column.EditableGridActionsColumn;
 import com.nadeem.app.grid.component.EditableDataTable;
 import com.nadeem.app.grid.provider.IEditableDataProvider;
-import com.nadeem.app.grid.toolbar.EditableGridBottomToolbar;
 import com.nadeem.app.grid.toolbar.EditableGridHeadersToolbar;
 import com.nadeem.app.grid.toolbar.EditableGridNavigationToolbar;
 

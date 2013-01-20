@@ -22,13 +22,14 @@ public class EditableTextFieldPropertyColumn<T, S> extends AbstractEditablePrope
 	@Override
 	public EditableCellPanel<T> getEditableCellPanel(String componentId)
 	{
-		return new EditableTextFieldCellPanel<T, S>(componentId, this){
+		return new EditableTextFieldCellPanel<T, S>(componentId, this)
+		{
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void addBehaviors(FormComponent<T> formComponent) {
-				// TODO Auto-generated method stub
+			protected void addBehaviors(FormComponent<T> formComponent)
+			{
 				EditableTextFieldPropertyColumn.this.addBehaviors(formComponent);
 			}
 		};

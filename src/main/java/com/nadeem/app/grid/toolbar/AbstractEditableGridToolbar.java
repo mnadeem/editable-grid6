@@ -5,7 +5,8 @@ import org.apache.wicket.model.IModel;
 
 import com.nadeem.app.grid.component.EditableDataTable;
 
-public class AbstractEditableGridToolbar extends Panel {
+public class AbstractEditableGridToolbar extends Panel
+{
 
 	private static final long serialVersionUID = 1L;
 

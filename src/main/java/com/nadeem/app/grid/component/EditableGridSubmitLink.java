@@ -38,7 +38,8 @@ public abstract class EditableGridSubmitLink extends AjaxSubmitLink
 		}
 	}
 
-	private boolean isFormComponentsValid() {
+	private boolean isFormComponentsValid()
+	{
 		final Boolean[] error = {false};
 		this.encapsulatingContainer.visitChildren(FormComponent.class, new IVisitor<FormComponent<?>, Void>()
 		{
@@ -68,8 +69,10 @@ public abstract class EditableGridSubmitLink extends AjaxSubmitLink
 		return !error[0];
 	}
 
-	private void updateFormComponentsModel() {
-		this.encapsulatingContainer.visitChildren(FormComponent.class, new IVisitor<FormComponent<?>, Void>(){				
+	private void updateFormComponentsModel()
+	{
+		this.encapsulatingContainer.visitChildren(FormComponent.class, new IVisitor<FormComponent<?>, Void>()
+		{				
 
 			@Override
 			public void component(FormComponent<?> formComponent, IVisit<Void> visit)
