@@ -85,6 +85,7 @@ public abstract class EditableGridActionsPanel<T> extends Panel {
 				listener.onPrecondition("if(!confirm('Do you really want to delete?')){return false;}"); 
 				attributes.getAjaxCallListeners().add(listener); 
 			}
+			@SuppressWarnings("unchecked")
 			@Override
 			public void onClick(AjaxRequestTarget target)
 			{

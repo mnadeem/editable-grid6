@@ -227,6 +227,7 @@ public class EditableDataTable<T, S> extends Panel implements IPageableItems
 	/**
 	 * @return dataprovider
 	 */
+	@SuppressWarnings("unchecked")
 	public final IEditableDataProvider<T, S> getDataProvider()
 	{
 		return (IEditableDataProvider<T, S>) datagrid.getDataProvider();

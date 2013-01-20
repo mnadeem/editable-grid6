@@ -12,26 +12,35 @@ public abstract class EditableGridSubmitLink extends AjaxSubmitLink
 {
 
 	private static final long serialVersionUID = 1L;
-	private WebMarkupContainer encapsulatingContainer;
-	
+	private final WebMarkupContainer encapsulatingContainer;
+
 	protected abstract void onSuccess(AjaxRequestTarget target);
 	protected abstract void onError(AjaxRequestTarget target);
 
-	public EditableGridSubmitLink(String id, WebMarkupContainer encapsulatingComponent)
+	public EditableGridSubmitLink(final String id, final WebMarkupContainer newEncapsulatingComponent)
 	{
 		super(id);
-		this.encapsulatingContainer = encapsulatingComponent;
+		this.encapsulatingContainer = newEncapsulatingComponent;
 	}
 
 	@Override
 	protected final void onSubmit(AjaxRequestTarget target, Form<?> form)
 	{
-		
-		final Boolean[] error = {false};
-		
-		// first iteration - validate components
 
-		encapsulatingContainer.visitChildren(FormComponent.class, new IVisitor<FormComponent<?>, Void>()
+		if (isFormComponentsValid())
+		{
+			updateFormComponentsModel();			
+			EditableGridSubmitLink.this.onSuccess(target);
+		} 
+		else
+		{
+			EditableGridSubmitLink.this.onError(target);
+		}
+	}
+
+	private boolean isFormComponentsValid() {
+		final Boolean[] error = {false};
+		this.encapsulatingContainer.visitChildren(FormComponent.class, new IVisitor<FormComponent<?>, Void>()
 		{
 			@Override
 			public void component(FormComponent<?> formComponent, IVisit<Void> visit)
@@ -56,37 +65,30 @@ public abstract class EditableGridSubmitLink extends AjaxSubmitLink
 				
 			}
 		});
-
-		// second iteration - update models if the validation passed
-		if (error[0] == false)
-		{
-			encapsulatingContainer.visitChildren(FormComponent.class, new IVisitor<FormComponent<?>, Void>(){				
-
-				@Override
-				public void component(FormComponent<?> formComponent, IVisit<Void> visit)
-				{
-					if (formComponentActive(formComponent))
-					{
-
-						formComponent.updateModel();
-
-						if (!formComponent.processChildren())
-						{
-							visit.dontGoDeeper();
-						}
-					}
-					visit.dontGoDeeper();					
-				}
-			});
-			
-			onSuccess(target);
-		} 
-		else
-		{
-			EditableGridSubmitLink.this.onError(target);
-		}
-
+		return !error[0];
 	}
+
+	private void updateFormComponentsModel() {
+		this.encapsulatingContainer.visitChildren(FormComponent.class, new IVisitor<FormComponent<?>, Void>(){				
+
+			@Override
+			public void component(FormComponent<?> formComponent, IVisit<Void> visit)
+			{
+				if (formComponentActive(formComponent))
+				{
+
+					formComponent.updateModel();
+
+					if (!formComponent.processChildren())
+					{
+						visit.dontGoDeeper();
+					}
+				}
+				visit.dontGoDeeper();					
+			}
+		});
+	}
+
 	@Override
 	protected final void onError(AjaxRequestTarget target, Form<?> form)
 	{
