@@ -1,4 +1,3 @@
-editable-grid6
-==============
+Now this project is part of wicket stuff, Refer https://github.com/wicketstuff/core/wiki/Editable-Grid instead
 
-This project will show how to provide add/edit/delete functionality on datagrid using Apache wicket6
+Kindly open any issues in that project
